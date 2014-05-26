@@ -19,7 +19,6 @@ class VeiculosController extends AppController {
 	}
 	
 	public function add() {
-		//echo var_dump($this->request);
 		if ($this->request->is('post')) {
 			$this->Veiculo->create();
 			if ($this->Veiculo->save($this->request->data)) {
@@ -44,7 +43,7 @@ class VeiculosController extends AppController {
 			echo $this->request;
 			$this->Veiculo->id = $id;
 			if ($this->Veiculo->save($this->request->data)) {
-				$this->Session->setFlash(__('As informacoes do veiculo foram atualizadas com sucesso.'));
+				$this->Session->setFlash(__('As informacoes do veiculo foram atualizadas com sucesso.'));				
 				return $this->redirect(array('action' => 'index'));
 			}
 			$this->Session->setFlash(__('Nao foi possivel atualizar as informacoes do veiculo..'));
@@ -52,7 +51,7 @@ class VeiculosController extends AppController {
 
 		if (!$this->request->data) {
 			$this->request->data = $veiculo;
-		}
+		}				
 	}
 
 	public function delete($id) {
@@ -65,6 +64,38 @@ class VeiculosController extends AppController {
 				__('O veiculo de id: %s foi retirado do sistema.', h($id))
 				);
 			return $this->redirect(array('action' => 'index'));
+		}
+	}
+	public function search(){
+
+		$veiculo = null;
+		if ($this->request->is('post')) {	
+			$placa = $this->request->data['Veiculo']['placa']; 
+
+			$veiculo = $this->Veiculo->find('first', array(
+				'conditions' => array('Veiculo.placa' => $placa)));        	
+
+//			if ($veiculo==null) {
+//				echo "Placa não encontrada";
+//			}		
+			if ($veiculo==null) {
+				$this->Session->setFlash(
+						__('Não foi encontrado veiculo com placa: %s', h($placa))
+						);
+				return $this->redirect(array('action' => 'index'));
+			}	
+			else{
+				$id = $veiculo['Veiculo']['id'];
+				if ($this->Veiculo->delete($id)) {
+					$this->Session->setFlash(
+						__('O veiculo de placa: %s foi posto a venda, e retirado do sistema.', h($placa))
+						);
+					return $this->redirect(array('action' => 'index'));
+				}
+			}	
+
+
+
 		}
 	}
 }

@@ -1,7 +1,8 @@
 <!-- File: /app/View/Posts/index.ctp -->
 
 <h1>Veiculos</h1>
-<p><?php echo $this->Html->link('Add Veiculo', array('action' => 'add')); ?></p>
+<p><?php echo $this->Html->link('Cadastrar Veiculo', array('action' => 'add')); ?></p>
+<p><?php echo $this->Html->link('Vender Veiculo', array('action' => 'search')); ?></p>
 <table>
     <tr>
         <th>Id</th>
